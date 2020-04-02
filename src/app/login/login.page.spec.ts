@@ -25,13 +25,12 @@ describe('LoginPage', () => {
   it('Login', () => {
     expect(component.user).toBeUndefined();
 
-    component.id = 'monId';
+    component.id = 'Bret';
     component.mdp = 'moonMdp';
 
     component.login();
 
     expect(component.user).toBeDefined();
-    expect(component.user.id).toBe('monId');
-
+    expect(component.user.id).toBe('Bret');
   });
 });

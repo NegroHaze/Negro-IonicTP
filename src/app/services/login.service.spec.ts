@@ -12,7 +12,11 @@ describe('LoginService', () => {
 
   it('login', () => {
     const service: LoginService = TestBed.get(LoginService);
-    const user = service.login('plop', 'replop');
-    expect(user[0].id).toBe('plop');
-  });
+    const idTest = 'Bret';
+    const nomReturned = 'Leanne Graham';
+    service.login(idTest, 'replop')
+        .subscribe(user => {
+            expect(user.nom).toBe(nomReturned);
+        });
+});
 });

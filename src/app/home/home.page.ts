@@ -11,13 +11,12 @@ import IUser from '../models/IUser';
 export class HomePage {
 
   title: string;
-  private user;
+  private user: User;
 
   constructor(private loginService: LoginService) {}
 
   updateTitle() {
     this.title = 'Mon Nouveau Titre';
-    this.user = this.loginService.login('AZEAZEAZE', 'P@ssw0rd');
     console.log(this.user);
   }
 
