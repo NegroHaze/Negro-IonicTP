@@ -20,6 +20,7 @@ describe('HomePage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.title).toBeUndefined();
   });
 
   it('change title', () => {
