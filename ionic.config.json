@@ -1,5 +1,7 @@
 {
   "name": "NegroApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
