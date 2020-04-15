@@ -31,20 +31,39 @@
         <ion-label>Fire Alert</ion-label>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="wine" slot="start"></ion-icon>
-        <ion-label>Card Link Item 2</ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-icon name="warning" slot="start"></ion-icon>
-        <ion-label>Card Button Item 1 activated</ion-label>
-      </ion-item>
-
-      <ion-item>
-        <ion-icon name="walk" slot="start"></ion-icon>
-        <ion-label>Card Button Item 2</ion-label>
+      
+      <ion-item (click)="timing()" class="ion-activated">
+        <ion-icon name="locate" slot="start"></ion-icon>
+        <ion-label>Current Position</ion-label>
       </ion-item>
     </ion-card>
+
+    <ion-card *ngIf="currentDate != null">
+     Date: {{currentDate.toLocaleDateString()}}
+    </ion-card>
+
+
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            Longitude
+          </ion-col>
+          <ion-col>
+            Latitude
+          </ion-col>
+          <ion-col>
+            Heure
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let posAndDate of currentPosAndDate">
+          <ion-col *ngFor="let elem of posAndDate">
+            {{elem}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
   </div>
 </ion-content>
