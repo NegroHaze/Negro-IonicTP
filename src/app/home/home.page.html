@@ -1,18 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank 1
+      Home
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" >Blank 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
     <ion-card>
       <ion-card-header>
@@ -31,19 +25,44 @@
         <ion-label>Fire Alert</ion-label>
       </ion-item>
 
+      <ion-item (click)="takePicture()" class="ion-activated">
+        <ion-icon name="camera" ></ion-icon>
+        <ion-label>Take picture</ion-label>
+      </ion-item>
+
       
       <ion-item (click)="timing()" class="ion-activated">
-        <ion-icon name="locate" slot="start"></ion-icon>
-        <ion-label>Current Position</ion-label>
+        <ion-icon name="locate"></ion-icon>
+        <ion-label>{{trackingStart ? "Stop" : "Start"}} tracking</ion-label>
       </ion-item>
-    </ion-card>
+      
+      <ion-item (click)="launchNotif()" class="ion-activated">
+        <ion-icon name="notifications"></ion-icon>
+        <ion-label>Get Notif</ion-label>
+      </ion-item>
+      
+      <ion-item routerLink="/camera-preview" class="ion-activated">
+        <ion-icon name="camera"></ion-icon>
+        <ion-label>Camera Preview</ion-label>
+      </ion-item>
 
-    <ion-card *ngIf="currentDate != null">
-     Date: {{currentDate.toLocaleDateString()}}
+      <ion-item routerLink="/login">
+        <ion-icon name="warning"></ion-icon>
+        <ion-label>Go To Login</ion-label>
+      </ion-item>
     </ion-card>
 
 
     <ion-card>
+      {{print}}
+    </ion-card>
+    
+    <ion-card *ngIf="imgData">
+      Photo prise le : {{currentDate.toLocaleDateString()}} à {{currentDate.toLocaleTimeString()}}
+      <img [src]="imgData">
+    </ion-card>
+
+    <ion-card *ngIf="currentPosAndDate.length != 0">
       <ion-grid>
         <ion-row>
           <ion-col>

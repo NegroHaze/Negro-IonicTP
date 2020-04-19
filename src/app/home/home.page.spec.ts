@@ -1,7 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
+import { Camera } from '@ionic-native/camera/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+
 import { HomePage } from './home.page';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -10,7 +15,8 @@ describe('HomePage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ HomePage ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), RouterTestingModule],
+      providers: [Camera, Geolocation, LocalNotifications]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
@@ -20,16 +26,12 @@ describe('HomePage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.title).toBeUndefined();
+    expect(component.notificationActive).toBeFalsy();
+    expect(component.trackingStart).toBeFalsy();
   });
 
-  it('change title', () => {
-    component.title = 'Mon Titre';
-    expect(component.title).toBe('Mon Titre');
-  });
-
-  it('update title', () => {
-    component.updateTitle();
-    expect(component.title).toBe('Mon Nouveau Titre');
+  it('should create notif', () => {
+    component.launchNotif();
+    expect(component.notificationActive).toBeTruthy();
   });
 });

@@ -1,43 +1,64 @@
 import { Component } from '@angular/core';
 import {AlertController} from '@ionic/angular';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
+
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
 export class HomePage {
 
-  title: string;
+  imgData: string;
   currentDate: Date;
   currentPosAndDate = new Array<Array<string>>();
+  trackingStart: boolean = false;
+  notificationActive: boolean = false;
+  print: string;
 
-  constructor(private alertController: AlertController, private geolocation: Geolocation) {
-    this.currentDate = new Date();
-  }
+  watch:any;
+  subscription: any;
 
-  updateTitle() {
-    this.title = 'Mon Nouveau Titre';
+  constructor(private alertController: AlertController, private camera: Camera, private geolocation: Geolocation, private localNotifications: LocalNotifications) {}
+
+  launchNotif(){
+
+    if(this.notificationActive){
+      this.localNotifications.clearAll();
+    }else {
+      this.localNotifications.schedule({
+        id: 1,
+        title: 'titre',
+        text: 'Tu es notifié',
+        data: { secret: "key" },
+      });
+    }
+    this.notificationActive = !this.notificationActive;
   }
 
   timing(){
-
-    this.geolocation.getCurrentPosition().then((resp) => {
-      let PosAndDate = new Array<string>(); 
-
-      PosAndDate.push(resp.coords.longitude.toString());
-      PosAndDate.push(resp.coords.latitude.toString());
-      PosAndDate.push(new Date().toLocaleTimeString());
-
-      this.currentPosAndDate.push(PosAndDate);
-    }).catch((error) => {
-       console.log('Error getting location', error);
-    });
+    if(this.trackingStart){
+      this.subscription.unsubscribe();
+      return this.trackingStart = false;
+    }else {
+      this.watch = this.geolocation.watchPosition();
+      this.subscription = this.watch.subscribe((resp) => {
+        let PosAndDate = new Array<string>();
+  
+        PosAndDate.push(resp.coords.longitude.toFixed(4).toString());
+        PosAndDate.push(resp.coords.latitude.toFixed(4).toString());
+        PosAndDate.push(new Date().toLocaleTimeString());
+  
+        this.currentPosAndDate.push(PosAndDate);
+        return this.trackingStart = true;;
+      });
+    }
   }
-  /**
-   * https://ionicframework.com/docs/api/alert
-   */
+  
   async fireAlert() {
     // creation de l alerte
     const alert = await this.alertController.create({
@@ -48,8 +69,23 @@ export class HomePage {
     });
     // quand l alerte sera masquée
     alert.onDidDismiss().then(() => console.log('alerte masquée'))
-
     // affichage de l alerte
     await alert.present();
+  }
+
+  takePicture() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation: true
+    };
+    this.camera.getPicture(options).then((imageData) => {
+      this.currentDate = new Date();
+      this.imgData = 'data:image/jpeg;base64,' + imageData;
+    }).catch(error => {
+      console.log('Error getting picture: ', error);
+    });
   }
 }
